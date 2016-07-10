@@ -1,0 +1,16 @@
+again: "Do you want to perform another calculation? (Y to calcaulate again)"
+amount: 
+  question: "What's the loan amount in dollars?"
+  example: "Example: 120000 or 120000.00"
+apr: 
+  question: "What's the annual percentate rate? (Enter a number from 0.01 to 100)"
+  example:  "Example: 3 represents 3% or 3.75 represents 3.75%"
+bye: "Thank you for using the mortgage calculator.  Good bye!"
+duration: 
+  question: "How many years is the loan for?"
+  example:  "Example: 30"
+greeting: "Welcome to the Mortgage calculator!"
+invalid_apr: "Hmm... that doesn't look like a valid APR."
+invalid_number: "Hmm... that doesn't look like a valid amount."
+invalid_years: "Hmm... that doesn't look like a valid year."
+payment: "Your monthly payment is $"
