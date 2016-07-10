@@ -2,7 +2,7 @@
 
 This repo contains the code and files for the exercises, challenges, and projects that I've created while going through the [launchschool](https://launchschool.com) curriculum:
 
-#### Programming & Back-end Prep
+## Programming & Back-end Prep
 100 - [Introduction to Programming](100/): 
   1. [The Basics](100/the_basics/solutions.rb)
   2. [Variables](100/variables/solutions.rb)
@@ -14,7 +14,7 @@ This repo contains the code and files for the exercises, challenges, and project
   8. [More Stuff](100/more_stuff/solutions.rb)
   9. [Exercises](100/exercises/solutions.rb)
 
-#### Programming & Back-end Development
+## Programming & Back-end Development
   1. 101 - [Programming Foundations](101/):
     1. [Lesson 2 - Small Programs](101/lesson_2)
       1. [Simple Calculator](101/lesson_2/calc.rb)
@@ -27,20 +27,20 @@ This repo contains the code and files for the exercises, challenges, and project
   4. 170 - Web Development
   5. 180 - SQL and Relational Databases
 
-#### Front-End Prep
+## Front-End Prep
 200 - Learn to code HTML & CSS
 
-#### Front-end Development
+## Front-end Development
   1. 201 - HTML & CSS
   2. 220 - Javascript and Front-End Programming
   3. 260 - Building Applications with Client-Side MVC
 
-#### Frameworks, Integrations and Advanced Topics
+## Frameworks, Integrations and Advanced Topics
   1. 301 - Rapid Prototyping with Ruby on Rails
   2. 310 - Build Robust and Production Quality Applications
   3. 350 - Practical Programming and Automation
   4. 360 - Working with Web APIs
 
-#### Electives
+## Electives
   1. 410 - Data Structures and Algorithm Analysis
   2. 420 - Advanced Ruby and Metaprogramming
