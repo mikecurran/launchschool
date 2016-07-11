@@ -22,6 +22,7 @@ This repo contains the code and files for the exercises, challenges, and project
       3. [Rock, Paper, Scissors, Lizard, Spock](101/lesson_2/rock_paper_scissors_lizard_spock.rb)
     2. [Lesson 3 - Excercises](101/lesson_3)
       1. [Easy 1](101/lesson_3/easy_1/solutions.rb)
+      2. [Easy 2](101/lesson_3/easy_2/solutions.rb)
   2. 120 - Object Oriented Programming
   3. 130 - Ruby Foundations: More Topics
   4. 170 - Web Development
