@@ -26,6 +26,7 @@ This repo contains the code and files for the exercises, challenges, and project
       3. [Easy 3](101/lesson_3/easy_3/solutions.rb)
       4. [Medium 1](101/lesson_3/medium_1/solutions.rb)
       5. [Medium 2](101/lesson_3/medium_2/solutions.rb)
+      6. [Medium 3](101/lesson_3/medium_3/solutions.rb)
   2. 120 - Object Oriented Programming
   3. 130 - Ruby Foundations: More Topics
   4. 170 - Web Development
