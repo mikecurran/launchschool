@@ -35,7 +35,7 @@ def round_result(player, computer)
 end
 
 def clear_screen
-  system "clear" or system "cls"
+  (system "clear") || (system "cls")
 end
 
 def display_results(result, score)
@@ -47,7 +47,9 @@ def display_results(result, score)
     prompt "It's a tie."
   end
 
-  prompt "The score is Player: [#{score[:player]}], Computer: [#{score[:computer]}], Ties: [#{score[:tie]}]"
+  prompt "The score is Player: [#{score[:player]}], " \
+          "Computer: [#{score[:computer]}], " \
+          "Ties: [#{score[:tie]}]"
 end
 
 def track_score(result, score)
@@ -81,7 +83,7 @@ def play_again?
 end
 
 loop do
-  score = { player: 0, computer: 0 , tie: 0}
+  score = { player: 0, computer: 0, tie: 0 }
   loop do
     choice = ''
     loop do
