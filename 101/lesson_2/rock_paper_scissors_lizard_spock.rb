@@ -93,6 +93,7 @@ loop do
       choice = gets.chomp.downcase
 
       break if CHOICES.key?(choice.to_sym)
+      clear_screen
       prompt "That's not a valid choice."
     end
 
