@@ -34,6 +34,10 @@ def round_result(player, computer)
   end
 end
 
+def clear_screen
+  system "clear" or system "cls"
+end
+
 def display_results(result, score)
   if result == 'player'
     prompt 'You Won this round!'
@@ -97,6 +101,7 @@ loop do
     result = round_result(choice, computer_choice)
 
     track_score(result, score)
+    clear_screen
     display_results(result, score)
 
     break display_winner(score) if score.value?(ROUNDS)
@@ -105,6 +110,7 @@ loop do
   prompt ''
   prompt 'Do you want to play again?'
   break unless play_again?
+  clear_screen
 end
 
 prompt 'Thank you for playing.  Good bye!'
