@@ -16,7 +16,7 @@ end
 
 def display_choices
   CHOICES.keys.each do |key|
-    prompt "#{key} for #{CHOICES[key][:name]}"
+    prompt "[#{key}] for #{CHOICES[key][:name]}"
   end
 end
 
@@ -43,7 +43,7 @@ def display_results(result, score)
     prompt "It's a tie."
   end
 
-  prompt "The score is Player: #{score[:player]}, Computer: #{score[:computer]}, Ties: #{score[:tie]}"
+  prompt "The score is Player: [#{score[:player]}], Computer: [#{score[:computer]}], Ties: [#{score[:tie]}]"
 end
 
 def track_score(result, score)
