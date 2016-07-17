@@ -1,12 +1,10 @@
-#!/usr/bin/env ruby
+## Question 1
+### Answer:
+It returns the original array, [1,2,3,4,5]
 
-# 1
-puts "It returns the original array, [1,2,3,4,5]"
-
-puts ""
-
-
-# 2
+## Question 2
+### Answer:
+```
 s = ""
 while s != "STOP" do
   puts "Enter a number"
@@ -16,17 +14,19 @@ while s != "STOP" do
   puts "Press any key to continue or type STOP to stop"
   s = gets.chomp
 end
-puts ""
+```
 
-
-# 3
+## Question 3
+### Answer:
+```
 a = %w(bob jack bill steve jason)
 
 a.each_with_index { |obj,i| puts "Index #{i} => #{obj}" }
-puts ""
+```
 
-
-# 4 
+## Question 4
+### Answer:
+``` 
 def zero(num)
   unless num < 0
     puts num
@@ -35,4 +35,4 @@ def zero(num)
 end
 
 zero(10)
-puts ""
+```

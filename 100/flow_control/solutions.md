@@ -1,16 +1,14 @@
-#!/usr/bin/env ruby
+## Question 1
+### Answer:
+1. false
+2. false 
+3. false 
+4. true 
+5. true 
 
-# 1
-puts "1. false" 
-puts "2. false" 
-puts "3. false" 
-puts "4. true" 
-puts "5. true" 
-
-puts ""
-
-
-# 2
+## Question 2
+### Answer:
+```
 hey = "hello world"
 yo = "yo!"
 
@@ -24,11 +22,11 @@ end
 
 puts word_caps(hey)
 puts word_caps(yo)
+```
 
-puts ""
-
-
-# 3
+## Question 3
+### Answer:
+```
 puts "Please enter a number between 0 and 100"
 num = gets.chomp.to_i
 
@@ -41,19 +39,17 @@ elsif num <= 100
 else
   puts "#{num} is greater than 100"
 end
+```
 
-puts ""
+## Question 4
+### Answer:
+1. FALSE
+2. Did you get it right?
+Alright now!
 
-
-# 4
-puts "1. FALSE"
-puts "2. Did you get it right?"
-puts "Alright now!"
-
-puts ""
-
-
-# 5
+## Question 5
+### Answer:
+```
 puts "Please enter a number between 0 and 100"
 num = gets.chomp.to_i
 
@@ -84,9 +80,8 @@ end
 
 if_num(num)
 case_num(num)
+```
 
-puts ""
-
-
-# 6
-puts "There is only one end, but should be two for the method and the if statement."
+## Question 6
+### Answer:
+There is only one end, but should be two for the method and the if statement.

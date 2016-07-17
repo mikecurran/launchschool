@@ -4,15 +4,15 @@ This repo contains the code and files for the exercises, challenges, and project
 
 ## Programming & Back-end Prep
 100 - [Introduction to Programming](100/): 
-  1. [The Basics](100/the_basics/solutions.rb)
-  2. [Variables](100/variables/solutions.rb)
-  3. [Methods](100/methods/solutions.rb)
-  4. [Flow Control](100/flow_control/solutions.rb)
-  5. [Loops & Iterators](100/loops_iterators/solutions.rb)
-  6. [Arrays](100/arrays/solutions.rb)
-  7. [Hashes](100/hashes/solutions.rb)
-  8. [More Stuff](100/more_stuff/solutions.rb)
-  9. [Exercises](100/exercises/solutions.rb)
+  1. [The Basics](100/the_basics/solutions.md)
+  2. [Variables](100/variables/solutions.md)
+  3. [Methods](100/methods/solutions.md)
+  4. [Flow Control](100/flow_control/solutions.md)
+  5. [Loops & Iterators](100/loops_iterators/solutions.md)
+  6. [Arrays](100/arrays/solutions.md)
+  7. [Hashes](100/hashes/solutions.md)
+  8. [More Stuff](100/more_stuff/solutions.md)
+  9. [Exercises](100/exercises/solutions.md)
 
 ## Programming & Back-end Development
   1. 101 - [Programming Foundations](101/):
@@ -21,13 +21,13 @@ This repo contains the code and files for the exercises, challenges, and project
       2. [Mortgage Calculator](101/lesson_2/mortgage_calc.rb)
       3. [Rock, Paper, Scissors, Lizard, Spock](101/lesson_2/rock_paper_scissors_lizard_spock.rb)
     2. [Lesson 3 - Excercises](101/lesson_3)
-      1. [Easy 1](101/lesson_3/easy_1/solutions.rb)
-      2. [Easy 2](101/lesson_3/easy_2/solutions.rb)
-      3. [Easy 3](101/lesson_3/easy_3/solutions.rb)
-      4. [Medium 1](101/lesson_3/medium_1/solutions.rb)
-      5. [Medium 2](101/lesson_3/medium_2/solutions.rb)
-      6. [Medium 3](101/lesson_3/medium_3/solutions.rb)
-      7. [Hard 1](101/lesson_3/hard_1/solutions.rb)
+      1. [Easy 1](101/lesson_3/easy_1/solutions.md)
+      2. [Easy 2](101/lesson_3/easy_2/solutions.md)
+      3. [Easy 3](101/lesson_3/easy_3/solutions.md)
+      4. [Medium 1](101/lesson_3/medium_1/solutions.md)
+      5. [Medium 2](101/lesson_3/medium_2/solutions.md)
+      6. [Medium 3](101/lesson_3/medium_3/solutions.md)
+      7. [Hard 1](101/lesson_3/hard_1/solutions.md)
   2. 120 - Object Oriented Programming
   3. 130 - Ruby Foundations: More Topics
   4. 170 - Web Development
