@@ -43,7 +43,7 @@ def display_results(result, score)
     prompt "It's a tie."
   end
 
-  prompt "The score is Player: #{score[:player]}, Computer: #{score[:computer]}"
+  prompt "The score is Player: #{score[:player]}, Computer: #{score[:computer]}, Ties: #{score[:tie]}"
 end
 
 def track_score(result, score)
@@ -51,6 +51,8 @@ def track_score(result, score)
     score[:player] += 1
   elsif result == 'computer'
     score[:computer] += 1
+  else
+    score[:tie] += 1
   end
 end
 
@@ -75,7 +77,7 @@ def play_again?
 end
 
 loop do
-  score = { player: 0, computer: 0 }
+  score = { player: 0, computer: 0 , tie: 0}
   loop do
     choice = ''
     loop do
