@@ -28,6 +28,8 @@ This repo contains the code and files for the exercises, challenges, and project
       5. [Medium 2](101/lesson_3/medium_2/solutions.md)
       6. [Medium 3](101/lesson_3/medium_3/solutions.md)
       7. [Hard 1](101/lesson_3/hard_1/solutions.md)
+    3. [Lesson 4 - Slightly Larger Programs](101/lesson_4)
+      1. [Tic Tac Toe](101/lesson_4/tic-tac-toe.rb)
   2. 120 - Object Oriented Programming
   3. 130 - Ruby Foundations: More Topics
   4. 170 - Web Development
