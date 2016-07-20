@@ -2,6 +2,7 @@
 INITIAL_MARKER = ' '.freeze
 PLAYER_MARKER = 'X'.freeze
 COMPUTER_MARKER = 'O'.freeze
+ROUNDS = 5
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
                 [[1, 5, 9], [3, 5, 7]]
@@ -18,8 +19,6 @@ end
 
 # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 def display_board(board)
-  (system 'clear') || (system 'cls')
-  puts "You're #{PLAYER_MARKER}.  Computer is #{COMPUTER_MARKER}"
   puts ''
   puts '     |     |'
   puts "  #{board[1]}  |  #{board[2]}  |  #{board[3]}"
@@ -36,15 +35,35 @@ def display_board(board)
 end
 
 # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+def clear_screen
+  (system 'clear') || (system 'cls')
+end
+
+def display_players
+  prompt "You're #{PLAYER_MARKER}.  Computer is #{COMPUTER_MARKER}"
+end
+
+def game_display(board, score)
+  clear_screen
+  display_score(score)
+  display_players
+  display_board(board)
+end
+
 def empty_squares(board)
   board.keys.select { |num| board[num] == INITIAL_MARKER }
+end
+
+def joinor(arr, delimiter = ', ', word = 'or')
+  arr[-1] = "#{word} #{arr.last}" if arr.size > 1
+  arr.size == 2 ? arr.join(' ') : arr.join(delimiter)
 end
 
 def player_marks_square!(board)
   square = ''
   loop do
     prompt 'Choose one of the following squares: ' +
-           empty_squares(board).join(', ')
+           joinor(empty_squares(board))
     square = gets.chomp.to_i
 
     break if empty_squares(board).include?(square)
@@ -74,31 +93,85 @@ def someone_won?(board)
   !detect_winner(board).nil?
 end
 
-loop do
-  board = initalize_board
-  display_board(board)
-
-  loop do
-    display_board(board)
-
-    player_marks_square!(board)
-    break if someone_won?(board) || board_full?(board)
-
-    computer_marks_square!(board)
-    break if someone_won?(board) || board_full?(board)
-  end
-
-  display_board(board)
-
-  if someone_won?(board)
-    prompt "#{detect_winner(board)} won!"
+def track_score(result, score)
+  if result == 'Player'
+    score[:player] += 1
+  elsif result == 'Computer'
+    score[:computer] += 1
   else
-    prompt "It's a tie!"
+    score[:tie] += 1
+  end
+end
+
+def display_round_winner(result)
+  if result == 'Player'
+    prompt 'You Won this round!'
+  elsif result == 'Computer'
+    prompt 'The Computer Won this round!'
+  else
+    prompt 'This round is a tie!'
+  end
+end
+
+def display_score(score)
+  prompt "The score is Player: [#{score[:player]}], " \
+          "Computer: [#{score[:computer]}], " \
+          "Ties: [#{score[:tie]}]"
+end
+
+def display_game_winner(final_score)
+  prompt ''
+  final_score.each do |player, score|
+    if score == ROUNDS && player == :player
+      prompt 'You won the game!'
+    elsif score == ROUNDS && player == :computer
+      prompt 'The computer won the game!'
+    end
+  end
+end
+
+def play_again?
+  loop do
+    answer = gets.chomp.downcase
+    break true if %w(y yes).include?(answer)
+    break false if %w(n no).include?(answer)
+    prompt "Please enter 'y' or 'n'"
+  end
+end
+
+loop do
+  score = { player: 0, computer: 0, tie: 0 }
+  loop do
+    board = initalize_board
+    result = ''
+    loop do
+      game_display(board, score)
+      player_marks_square!(board)
+      if someone_won?(board) || board_full?(board)
+        result = detect_winner(board)
+        track_score(result, score)
+        break
+      end
+
+      computer_marks_square!(board)
+      if someone_won?(board) || board_full?(board)
+        result = detect_winner(board)
+        track_score(result, score)
+        break
+      end
+    end
+
+    game_display(board, score)
+    display_round_winner(result)
+
+    prompt 'Hit Enter to continue...'
+    gets
+
+    break display_game_winner(score) if score.value?(ROUNDS)
   end
 
-  prompt 'Play again? (y or n)'
-  answer = gets.chomp
-  break unless answer.downcase.start_with?('y')
+  prompt 'Do you want to play again? (y or n)'
+  break unless play_again?
 end
 
 prompt 'Thank you for playing Tic Tac Toe.  Good bye!'
