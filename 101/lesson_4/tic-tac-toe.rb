@@ -54,9 +54,25 @@ def empty_squares(board)
   board.keys.select { |num| board[num] == INITIAL_MARKER }
 end
 
-def joinor(arr, delimiter = ', ', word = 'or')
-  arr[-1] = "#{word} #{arr.last}" if arr.size > 1
-  arr.size == 2 ? arr.join(' ') : arr.join(delimiter)
+def board_full?(board)
+  empty_squares(board).empty?
+end
+
+def find_at_risk_square(line, board)
+  if board.values_at(*line).count('X') == 2
+    board.select { |sqr, mark| line.include?(sqr) && mark == ' ' }.keys.first
+  end
+end
+
+def computer_marks_square!(board)
+  square = nil
+  WINNING_LINES.each do |line|
+    square = find_at_risk_square(line, board)
+    break if square
+  end
+
+  square = empty_squares(board).sample unless square
+  board[square] = COMPUTER_MARKER
 end
 
 def player_marks_square!(board)
@@ -72,13 +88,9 @@ def player_marks_square!(board)
   board[square] = PLAYER_MARKER
 end
 
-def computer_marks_square!(board)
-  square = empty_squares(board).sample
-  board[square] = COMPUTER_MARKER
-end
-
-def board_full?(board)
-  empty_squares(board).empty?
+def joinor(arr, delimiter = ', ', word = 'or')
+  arr[-1] = "#{word} #{arr.last}" if arr.size > 1
+  arr.size == 2 ? arr.join(' ') : arr.join(delimiter)
 end
 
 def detect_winner(board)
@@ -141,6 +153,7 @@ end
 
 loop do
   score = { player: 0, computer: 0, tie: 0 }
+
   loop do
     board = initalize_board
     result = ''
