@@ -82,14 +82,10 @@ def computer_offensive_move(board)
   nil
 end
 
-def middle_square_empty?(board)
-  empty_squares(board).include?(5)
-end
-
 def computer_marks_square!(board)
   square = computer_offensive_move(board)
   square = computer_defensive_move(board) unless square
-  square = 5 if middle_square_empty?(board) && !square
+  square = 5 if empty_squares(board).include?(5) && !square
   square = empty_squares(board).sample unless square
   board[square] = COMPUTER_MARKER
 end
