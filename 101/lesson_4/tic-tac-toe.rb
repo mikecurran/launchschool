@@ -59,7 +59,7 @@ def board_full?(board)
 end
 
 def find_at_risk_square(line, board)
-  if board.values_at(*line).count('X') == 2
+  if board.values_at(*line).count(PLAYER_MARKER) == 2
     board.select { |sqr, mark| line.include?(sqr) && mark == ' ' }.keys.first
   end
 end
