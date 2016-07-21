@@ -58,19 +58,38 @@ def board_full?(board)
   empty_squares(board).empty?
 end
 
-def find_at_risk_square(line, board)
-  if board.values_at(*line).count(PLAYER_MARKER) == 2
-    board.select { |sqr, mark| line.include?(sqr) && mark == ' ' }.keys.first
+def find_at_risk_square(line, board, marker)
+  if board.values_at(*line).count(marker) == 2
+    board.select do |square, mark|
+      line.include?(square) && mark == INITIAL_MARKER
+    end.keys.first
   end
 end
 
-def computer_marks_square!(board)
-  square = nil
+def computer_defensive_move(board)
   WINNING_LINES.each do |line|
-    square = find_at_risk_square(line, board)
-    break if square
+    square = find_at_risk_square(line, board, PLAYER_MARKER)
+    return square if square
   end
+  nil
+end
 
+def computer_offensive_move(board)
+  WINNING_LINES.each do |line|
+    square = find_at_risk_square(line, board, COMPUTER_MARKER)
+    return square if square
+  end
+  nil
+end
+
+def middle_square_empty?(board)
+  empty_squares(board).include?(5)
+end
+
+def computer_marks_square!(board)
+  square = computer_offensive_move(board)
+  square = computer_defensive_move(board) unless square
+  square = 5 if middle_square_empty?(board) && !square
   square = empty_squares(board).sample unless square
   board[square] = COMPUTER_MARKER
 end
