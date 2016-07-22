@@ -40,7 +40,7 @@ end
 
 def select_player
   if INITIAL_PLAYER == 'choose'
-    prompt 'Would you like to go first this round? (y or n)'
+    prompt 'Starting a new round. Would you like to go first? (y or n)'
     got_yes? ? 'player' : 'computer'
   end
 end
@@ -188,7 +188,6 @@ loop do
 
   loop do
     board = initalize_board
-    clear_screen
     current_player = select_player
 
     loop do
@@ -204,9 +203,6 @@ loop do
 
     game_display(board, score)
     display_round_winner(result)
-
-    prompt 'Press enter to continue...'
-    gets
 
     break display_game_winner(score) if score.value?(ROUNDS)
   end
