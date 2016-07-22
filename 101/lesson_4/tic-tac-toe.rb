@@ -35,7 +35,7 @@ end
 
 # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 def clear_screen
-  (system 'clear') || (system 'cls')
+  system('clear') || system('cls')
 end
 
 def select_player
@@ -95,7 +95,7 @@ def computer_marks_square!(board)
   square = computer_offensive_move(board)
 
   square = computer_defensive_move(board) unless square
-  square = 5 if empty_squares(board).include?(5) && !square
+  square = 5 if !square && empty_squares(board).include?(5)
   square = empty_squares(board).sample unless square
 
   board[square] = MARKERS[:computer]
