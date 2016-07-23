@@ -41,7 +41,7 @@ end
 def select_player
   if INITIAL_PLAYER == 'choose'
     prompt 'Starting a new round. Would you like to go first? (y or n)'
-    got_yes? ? 'player' : 'computer'
+    confirmed? ? 'player' : 'computer'
   end
 end
 
@@ -174,7 +174,7 @@ def display_game_winner(final_score)
   end
 end
 
-def got_yes?
+def confirmed?
   loop do
     answer = gets.chomp.downcase
     return true if %w(y yes).include?(answer)
@@ -208,7 +208,7 @@ loop do
   end
 
   prompt 'Do you want to play again? (y or n)'
-  break unless got_yes?
+  break unless confirmed?
 end
 
 prompt 'Thank you for playing Tic Tac Toe.  Good bye!'
