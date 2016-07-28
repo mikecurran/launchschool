@@ -45,11 +45,7 @@ def running_total(card, sum, aces)
          else value.to_i
          end
 
-  if value == 'Ace'
-    aces += 1
-    aces.times { sum -= 10 if sum > LIMIT }
-    aces -= 1
-  end
+  aces.times { sum -= 10 if sum > LIMIT } if value == 'Ace'
 
   if aces > 0
     aces.times { sum -= 10 if sum > LIMIT }
