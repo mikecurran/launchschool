@@ -2,6 +2,7 @@
 require 'pry'
 SUITS = %w(Hearts Diamonds Spades Clubs).freeze
 VALUES = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace).freeze
+LIMIT = 21
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -11,8 +12,8 @@ def initialize_deck
   VALUES.product(SUITS).shuffle
 end
 
-def get_cards(deck, num = 1)
-  num == 1 ? deck.shift : deck.shift(num)
+def get_cards(deck, num = nil)
+  num.nil? ? deck.shift : deck.shift(num)
 end
 
 def join_cards(cards)
@@ -21,68 +22,61 @@ def join_cards(cards)
   cards.size == 2 ? cards.join(' ') : cards.join(', ')
 end
 
-# rubocop:disable Metrics/MethodLength
-def total(cards)
+def initial_total(cards)
   values = cards.map { |card| card[0] }
 
   sum = 0
   values.each do |value|
-    sum = if value == 'Ace'
-            sum + 11
-          elsif value.to_i == 0 # J, Q, K
-            sum + 10
-          else
-            sum + value.to_i
-          end
+    sum += if value == 'Ace' then 11
+           elsif value.to_i == 0 then 10 # J, Q, K
+           else value.to_i
+           end
   end
 
-  calculate_aces(values, sum)
+  sum -= 10 if sum == 22
+  aces = values.select { |value| value == 'Ace' }.count > 0 ? 1 : 0
+  [sum, aces]
 end
 
-def calculate_aces(values, sum)
-  values.select { |value| value == 'Ace' }.count.times do
-    sum -= 10 if sum > 21
+def running_total(card, sum, aces)
+  value = card[0]
+  sum += if value == 'Ace' then 11
+         elsif value.to_i == 0 then 10 # J, Q, K
+         else value.to_i
+         end
+
+  if value == 'Ace'
+    aces += 1
+    aces.times { sum -= 10 if sum > LIMIT }
+    aces -= 1
   end
-  sum
+
+  if aces > 0
+    aces.times { sum -= 10 if sum > LIMIT }
+    aces -= 1
+  end
+  [sum, aces]
 end
 
-def detect_result(dealer_cards, player_cards)
-  player_total = total(player_cards)
-  dealer_total = total(dealer_cards)
-
-  if player_total > 21
-    :player_busted
-  elsif dealer_total > 21
-    :dealer_busted
-  elsif dealer_total < player_total
-    :player
-  elsif dealer_total > player_total
-    :dealer
-  else
-    :tie
+def detect_result(dealer_total, player_total)
+  if player_total > LIMIT then :player_busted
+  elsif dealer_total > LIMIT then :dealer_busted
+  elsif dealer_total < player_total then :player
+  elsif dealer_total > player_total then :dealer
+  else :tie
   end
 end
 
-def display_result(dealer_cards, player_cards)
-  result = detect_result(dealer_cards, player_cards)
+def display_result(dealer_total, player_total)
+  result = detect_result(dealer_total, player_total)
 
   case result
-  when :player_busted
-    prompt 'You busted! Dealer wins!'
-  when :dealer_busted
-    prompt 'Dealer busted! You win!'
-  when :player
-    prompt 'You win!'
-  when :dealer
-    prompt 'Dealer wins!'
-  when :tie
-    prompt "It's a tie!"
+  when :player_busted then prompt 'You busted! Dealer wins!'
+  when :dealer_busted then prompt 'Dealer busted! You win!'
+  when :player then prompt 'You win!'
+  when :dealer then prompt 'Dealer wins!'
+  when :tie then prompt "It's a tie!"
   end
-end
-# rubocop:enable Metrics/MethodLength
-
-def busted?(cards)
-  total(cards) > 21
 end
 
 def play_again?
@@ -99,17 +93,20 @@ loop do
 
   dealer_busted = false
   player_busted = false
-  player_cards = get_cards(deck, 2)
   dealer_cards = get_cards(deck, 2)
+  player_cards = get_cards(deck, 2)
+  dealer_total, dealer_total_aces = initial_total(dealer_cards)
+  player_total, player_total_aces = initial_total(player_cards)
 
   prompt "Dealer has: #{dealer_cards[0][0]} " \
          "of #{dealer_cards[0][1]} and unknown card"
   prompt "You have: #{join_cards(player_cards)}, " \
-         "for a total of #{total(player_cards)}"
+         "for a total of #{player_total}"
 
   loop do
-    break player_busted = true if busted?(player_cards)
+    break player_busted = true if player_total > LIMIT
     player_turn = nil
+
     loop do
       prompt 'Would you like to (h)it or (s)tay?'
       player_turn = gets.chomp.downcase
@@ -119,16 +116,20 @@ loop do
 
     if player_turn == 'h'
       player_cards << get_cards(deck)
+      player_total, player_total_aces = running_total(player_cards.last,
+                                                      player_total,
+                                                      player_total_aces)
+
       prompt 'You chose to hit!'
       prompt "Your cards are now: #{join_cards(player_cards)}"
-      prompt "Your total is now: #{total(player_cards)}"
+      prompt "Your total is now: #{player_total}"
     end
 
     break if player_turn == 's'
   end
 
   if player_busted
-    display_result(dealer_cards, player_cards)
+    display_result(dealer_total, player_total)
     prompt 'Do you want to play again? (y or n)'
     play_again? ? next : break
   end
@@ -136,31 +137,34 @@ loop do
   prompt "Dealer's turn..."
 
   loop do
-    break dealer_busted = true if busted?(dealer_cards)
-    break if player_busted || total(dealer_cards) >= 17
+    break dealer_busted = true if dealer_total > LIMIT
+    break if player_busted || dealer_total >= 17
 
     prompt 'Dealer hits!'
     dealer_cards << get_cards(deck)
+    dealer_total, dealer_total_aces = running_total(dealer_cards.last,
+                                                    dealer_total,
+                                                    dealer_total_aces)
     prompt "Dealer's cards are now: #{join_cards(dealer_cards)}"
   end
 
   if dealer_busted
-    prompt "Dealer total is now: #{total(dealer_cards)}"
-    display_result(dealer_cards, player_cards)
+    prompt "Dealer total is now: #{dealer_total}"
+    display_result(dealer_total, player_total)
     prompt 'Do you want to play again? (y or n)'
     play_again? ? next : break
   else
-    prompt "Dealer stays at #{total(dealer_cards)}"
+    prompt "Dealer stays at #{dealer_total}"
   end
 
   puts '=============='
   prompt "Dealer has #{join_cards(dealer_cards)}, " \
-         "for a total of: #{total(dealer_cards)}"
+         "for a total of: #{dealer_total}"
   prompt "Player has #{join_cards(player_cards)}, " \
-         "for a total of: #{total(player_cards)}"
+         "for a total of: #{player_total}"
   puts '=============='
 
-  display_result(dealer_cards, player_cards)
+  display_result(dealer_total, player_total)
 
   prompt 'Do you want to play again? (y or n)'
   break unless play_again?
