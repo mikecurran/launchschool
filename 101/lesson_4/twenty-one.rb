@@ -75,6 +75,16 @@ def display_result(dealer_total, player_total)
   end
 end
 
+def show_round_results(dealer_cards, dealer_total, player_cards, player_total)
+  puts '=============='
+  prompt "Dealer has #{join_cards(dealer_cards)}, " \
+         "for a total of: #{dealer_total}"
+  prompt "Player has #{join_cards(player_cards)}, " \
+         "for a total of: #{player_total}"
+  puts '=============='
+  display_result(dealer_total, player_total)
+end
+
 def play_again?
   loop do
     answer = gets.chomp.downcase
@@ -125,7 +135,7 @@ loop do
   end
 
   if player_busted
-    display_result(dealer_total, player_total)
+    show_round_results(dealer_cards, dealer_total, player_cards, player_total)
     prompt 'Do you want to play again? (y or n)'
     play_again? ? next : break
   end
@@ -145,23 +155,14 @@ loop do
   end
 
   if dealer_busted
-    prompt "Dealer total is now: #{dealer_total}"
-    display_result(dealer_total, player_total)
+    show_round_results(dealer_cards, dealer_total, player_cards, player_total)
     prompt 'Do you want to play again? (y or n)'
     play_again? ? next : break
   else
     prompt "Dealer stays at #{dealer_total}"
   end
 
-  puts '=============='
-  prompt "Dealer has #{join_cards(dealer_cards)}, " \
-         "for a total of: #{dealer_total}"
-  prompt "Player has #{join_cards(player_cards)}, " \
-         "for a total of: #{player_total}"
-  puts '=============='
-
-  display_result(dealer_total, player_total)
-
+  show_round_results(dealer_cards, dealer_total, player_cards, player_total)
   prompt 'Do you want to play again? (y or n)'
   break unless play_again?
 end
