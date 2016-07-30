@@ -59,11 +59,9 @@ def running_total(card, sum, aces)
 end
 
 def running_ace_adjustment(sum, aces)
-  if sum > GAME_LIMIT && aces > 0
-    aces.times do
-      sum -= 10
-      aces -= 1
-    end
+  while sum > GAME_LIMIT && aces > 0
+    sum -= 10
+    aces -= 1
   end
   [sum, aces]
 end
