@@ -9,6 +9,10 @@ def prompt(msg)
   puts "=> #{msg}"
 end
 
+def clear_screen
+  system('clear') || system('cls')
+end
+
 def initialize_deck
   VALUES.product(SUITS).shuffle
 end
@@ -136,6 +140,7 @@ end
 
 loop do
   score = { player: 0, dealer: 0, tie: 0 }
+  clear_screen
 
   loop do
     deck = initialize_deck
@@ -189,9 +194,10 @@ loop do
     result = detect_result(dealer_total, player_total)
     track_score(result, score)
     show_round_results(dealer_cards, dealer_total, player_cards, player_total)
-    
+
     prompt 'Press enter to continue...'
     gets
+    clear_screen
 
     break display_game_winner(score) if score.value?(ROUNDS)
   end
