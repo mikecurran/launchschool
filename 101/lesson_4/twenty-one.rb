@@ -32,6 +32,10 @@ def initial_total(cards)
            end
   end
 
+  initial_ace_adjustment(values, sum)
+end
+
+def initial_ace_adjustment(values, sum)
   sum -= 10 if sum == 22
   aces = values.select { |value| value == 'Ace' }.count > 0 ? 1 : 0
   [sum, aces]
@@ -44,11 +48,16 @@ def running_total(card, sum, aces)
          else value.to_i
          end
 
-  aces.times { sum -= 10 if sum > LIMIT } if value == 'Ace'
+  aces += 1 if value == 'Ace'
+  running_ace_adjustment( sum, aces)
+end
 
-  if aces > 0
-    aces.times { sum -= 10 if sum > LIMIT }
-    aces -= 1
+def running_ace_adjustment(sum, aces)
+  if sum > LIMIT && aces > 0
+    aces.times do
+      sum -= 10
+      aces -= 1
+    end
   end
   [sum, aces]
 end
@@ -121,7 +130,6 @@ loop do
   player_cards = get_cards(deck, 2)
   dealer_total, dealer_aces = initial_total(dealer_cards)
   player_total, player_aces = initial_total(player_cards)
-
   display_score(score)
 
   prompt "Dealer has: #{dealer_cards[0][0]} " \
