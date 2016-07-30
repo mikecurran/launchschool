@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
+DEALER_LIMIT = 17
+LIMIT = 21
 SUITS = %w(Hearts Diamonds Spades Clubs).freeze
 VALUES = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace).freeze
-LIMIT = 21
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -49,7 +50,7 @@ def running_total(card, sum, aces)
          end
 
   aces += 1 if value == 'Ace'
-  running_ace_adjustment( sum, aces)
+  running_ace_adjustment(sum, aces)
 end
 
 def running_ace_adjustment(sum, aces)
@@ -163,7 +164,7 @@ loop do
   unless busted?(player_total)
     prompt "Dealer's turn..."
 
-    until dealer_total >= 17
+    until dealer_total >= DEALER_LIMIT
       prompt 'Dealer hits!'
       dealer_cards << get_cards(deck)
       dealer_total, dealer_aces = running_total(dealer_cards.last,
