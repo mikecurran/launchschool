@@ -119,8 +119,8 @@ loop do
 
   dealer_cards = get_cards(deck, 2)
   player_cards = get_cards(deck, 2)
-  dealer_total, dealer_total_aces = initial_total(dealer_cards)
-  player_total, player_total_aces = initial_total(player_cards)
+  dealer_total, dealer_aces = initial_total(dealer_cards)
+  player_total, player_aces = initial_total(player_cards)
 
   display_score(score)
 
@@ -142,9 +142,8 @@ loop do
 
     if player_turn == 'h'
       player_cards << get_cards(deck)
-      player_total, player_total_aces = running_total(player_cards.last,
-                                                      player_total,
-                                                      player_total_aces)
+      player_total, player_aces = running_total(player_cards.last,
+                                                player_total, player_aces)
       prompt 'You chose to hit!'
       prompt "Your cards are now: #{join_cards(player_cards)}"
       prompt "Your total is now: #{player_total}"
@@ -153,31 +152,16 @@ loop do
     break if player_turn == 's'
   end
 
-  if busted?(player_total)
-    show_round_results(dealer_cards, dealer_total, player_cards, player_total)
-    result = detect_result(dealer_total, player_total)
-    track_score(result, score)
-    prompt 'Do you want to play again? (y or n)'
-    play_again? ? next : break
-  end
+  unless busted?(player_total)
+    prompt "Dealer's turn..."
 
-  prompt "Dealer's turn..."
-
-  until dealer_total >= 17
-    prompt 'Dealer hits!'
-    dealer_cards << get_cards(deck)
-    dealer_total, dealer_total_aces = running_total(dealer_cards.last,
-                                                    dealer_total,
-                                                    dealer_total_aces)
-    prompt "Dealer's cards are now: #{join_cards(dealer_cards)}"
-  end
-
-  if busted?(dealer_total)
-    show_round_results(dealer_cards, dealer_total, player_cards, player_total)
-    result = detect_result(dealer_total, player_total)
-    track_score(result, score)
-    prompt 'Do you want to play again? (y or n)'
-    play_again? ? next : break
+    until dealer_total >= 17
+      prompt 'Dealer hits!'
+      dealer_cards << get_cards(deck)
+      dealer_total, dealer_aces = running_total(dealer_cards.last,
+                                                dealer_total, dealer_aces)
+      prompt "Dealer's cards are now: #{join_cards(dealer_cards)}"
+    end
   end
 
   result = detect_result(dealer_total, player_total)
