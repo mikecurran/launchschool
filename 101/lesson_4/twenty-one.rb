@@ -74,6 +74,22 @@ def display_result(dealer_total, player_total)
   end
 end
 
+def track_score(result, score)
+  if result == :player || result == :dealer_busted
+    score[:player] += 1
+  elsif result == :dealer || result == :player_busted
+    score[:dealer] += 1
+  else
+    score[:tie] += 1
+  end
+end
+
+def display_score(score)
+  prompt "The score is Player: [#{score[:player]}], " \
+          "Dealer: [#{score[:dealer]}], " \
+          "Ties: [#{score[:tie]}]"
+end
+
 def show_round_results(dealer_cards, dealer_total, player_cards, player_total)
   puts '=============='
   prompt "Dealer has #{join_cards(dealer_cards)}, " \
@@ -97,6 +113,7 @@ def play_again?
   end
 end
 
+score = { player: 0, dealer: 0, tie: 0 }
 loop do
   deck = initialize_deck
 
@@ -105,12 +122,14 @@ loop do
   dealer_total, dealer_total_aces = initial_total(dealer_cards)
   player_total, player_total_aces = initial_total(player_cards)
 
+  display_score(score)
+
   prompt "Dealer has: #{dealer_cards[0][0]} " \
          "of #{dealer_cards[0][1]} and unknown card"
   prompt "You have: #{join_cards(player_cards)}, " \
          "for a total of #{player_total}"
 
-  loop do 
+  loop do
     break if busted?(player_total)
     player_turn = nil
 
@@ -126,7 +145,6 @@ loop do
       player_total, player_total_aces = running_total(player_cards.last,
                                                       player_total,
                                                       player_total_aces)
-
       prompt 'You chose to hit!'
       prompt "Your cards are now: #{join_cards(player_cards)}"
       prompt "Your total is now: #{player_total}"
@@ -137,6 +155,8 @@ loop do
 
   if busted?(player_total)
     show_round_results(dealer_cards, dealer_total, player_cards, player_total)
+    result = detect_result(dealer_total, player_total)
+    track_score(result, score)
     prompt 'Do you want to play again? (y or n)'
     play_again? ? next : break
   end
@@ -154,9 +174,14 @@ loop do
 
   if busted?(dealer_total)
     show_round_results(dealer_cards, dealer_total, player_cards, player_total)
+    result = detect_result(dealer_total, player_total)
+    track_score(result, score)
     prompt 'Do you want to play again? (y or n)'
     play_again? ? next : break
   end
+
+  result = detect_result(dealer_total, player_total)
+  track_score(result, score)
 
   show_round_results(dealer_cards, dealer_total, player_cards, player_total)
   prompt 'Do you want to play again? (y or n)'
