@@ -85,6 +85,10 @@ def show_round_results(dealer_cards, dealer_total, player_cards, player_total)
   display_result(dealer_total, player_total)
 end
 
+def busted?(total)
+  total > LIMIT
+end
+
 def play_again?
   loop do
     answer = gets.chomp.downcase
@@ -97,8 +101,6 @@ end
 loop do
   deck = initialize_deck
 
-  dealer_busted = false
-  player_busted = false
   dealer_cards = get_cards(deck, 2)
   player_cards = get_cards(deck, 2)
   dealer_total, dealer_total_aces = initial_total(dealer_cards)
@@ -109,8 +111,8 @@ loop do
   prompt "You have: #{join_cards(player_cards)}, " \
          "for a total of #{player_total}"
 
-  loop do
-    break player_busted = true if player_total > LIMIT
+  loop do 
+    break if busted?(player_total)
     player_turn = nil
 
     loop do
@@ -134,7 +136,7 @@ loop do
     break if player_turn == 's'
   end
 
-  if player_busted
+  if busted?(player_total)
     show_round_results(dealer_cards, dealer_total, player_cards, player_total)
     prompt 'Do you want to play again? (y or n)'
     play_again? ? next : break
@@ -142,10 +144,7 @@ loop do
 
   prompt "Dealer's turn..."
 
-  loop do
-    break dealer_busted = true if dealer_total > LIMIT
-    break if player_busted || dealer_total >= 17
-
+  until dealer_total >= 17
     prompt 'Dealer hits!'
     dealer_cards << get_cards(deck)
     dealer_total, dealer_total_aces = running_total(dealer_cards.last,
@@ -154,7 +153,7 @@ loop do
     prompt "Dealer's cards are now: #{join_cards(dealer_cards)}"
   end
 
-  if dealer_busted
+  if busted?(dealer_total)
     show_round_results(dealer_cards, dealer_total, player_cards, player_total)
     prompt 'Do you want to play again? (y or n)'
     play_again? ? next : break
