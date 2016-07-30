@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require 'pry'
 SUITS = %w(Hearts Diamonds Spades Clubs).freeze
 VALUES = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace).freeze
 LIMIT = 21
@@ -157,8 +156,6 @@ loop do
     show_round_results(dealer_cards, dealer_total, player_cards, player_total)
     prompt 'Do you want to play again? (y or n)'
     play_again? ? next : break
-  else
-    prompt "Dealer stays at #{dealer_total}"
   end
 
   show_round_results(dealer_cards, dealer_total, player_cards, player_total)
