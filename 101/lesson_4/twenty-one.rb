@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 DEALER_LIMIT = 17
-LIMIT = 21
+GAME_LIMIT = 21
+ROUNDS = 5
 SUITS = %w(Hearts Diamonds Spades Clubs).freeze
 VALUES = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace).freeze
 
@@ -54,7 +55,7 @@ def running_total(card, sum, aces)
 end
 
 def running_ace_adjustment(sum, aces)
-  if sum > LIMIT && aces > 0
+  if sum > GAME_LIMIT && aces > 0
     aces.times do
       sum -= 10
       aces -= 1
@@ -64,8 +65,8 @@ def running_ace_adjustment(sum, aces)
 end
 
 def detect_result(dealer_total, player_total)
-  if player_total > LIMIT then :player_busted
-  elsif dealer_total > LIMIT then :dealer_busted
+  if player_total > GAME_LIMIT then :player_busted
+  elsif dealer_total > GAME_LIMIT then :dealer_busted
   elsif dealer_total < player_total then :player
   elsif dealer_total > player_total then :dealer
   else :tie
@@ -76,10 +77,10 @@ def display_result(dealer_total, player_total)
   result = detect_result(dealer_total, player_total)
 
   case result
-  when :player_busted then prompt 'You busted! Dealer wins!'
-  when :dealer_busted then prompt 'Dealer busted! You win!'
-  when :player then prompt 'You win!'
-  when :dealer then prompt 'Dealer wins!'
+  when :player_busted then prompt 'You busted! Dealer wins this round!'
+  when :dealer_busted then prompt 'Dealer busted! You win this round!'
+  when :player then prompt 'You win this round!'
+  when :dealer then prompt 'Dealer wins this round!'
   when :tie then prompt "It's a tie!"
   end
 end
@@ -110,8 +111,18 @@ def show_round_results(dealer_cards, dealer_total, player_cards, player_total)
   display_result(dealer_total, player_total)
 end
 
+def display_game_winner(final_score)
+  final_score.each do |player, score|
+    if score == ROUNDS && player == :player
+      prompt 'You won the game!'
+    elsif score == ROUNDS && player == :dealer
+      prompt 'The dealer won the game!'
+    end
+  end
+end
+
 def busted?(total)
-  total > LIMIT
+  total > GAME_LIMIT
 end
 
 def play_again?
@@ -176,7 +187,12 @@ loop do
   result = detect_result(dealer_total, player_total)
   track_score(result, score)
 
-  show_round_results(dealer_cards, dealer_total, player_cards, player_total)
+  if score.value?(ROUNDS)
+    display_game_winner(score)
+  else
+    show_round_results(dealer_cards, dealer_total, player_cards, player_total)
+  end
+
   prompt 'Do you want to play again? (y or n)'
   break unless play_again?
 end
