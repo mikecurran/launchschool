@@ -134,63 +134,66 @@ def play_again?
   end
 end
 
-score = { player: 0, dealer: 0, tie: 0 }
 loop do
-  deck = initialize_deck
-
-  dealer_cards = get_cards(deck, 2)
-  player_cards = get_cards(deck, 2)
-  dealer_total, dealer_aces = initial_total(dealer_cards)
-  player_total, player_aces = initial_total(player_cards)
-  display_score(score)
-
-  prompt "Dealer has: #{dealer_cards[0][0]} " \
-         "of #{dealer_cards[0][1]} and unknown card"
-  prompt "You have: #{join_cards(player_cards)}, " \
-         "for a total of #{player_total}"
+  score = { player: 0, dealer: 0, tie: 0 }
 
   loop do
-    break if busted?(player_total)
-    player_turn = nil
+    deck = initialize_deck
+
+    dealer_cards = get_cards(deck, 2)
+    player_cards = get_cards(deck, 2)
+    dealer_total, dealer_aces = initial_total(dealer_cards)
+    player_total, player_aces = initial_total(player_cards)
+    display_score(score)
+
+    prompt "Dealer has: #{dealer_cards[0][0]} " \
+           "of #{dealer_cards[0][1]} and unknown card"
+    prompt "You have: #{join_cards(player_cards)}, " \
+           "for a total of #{player_total}"
 
     loop do
-      prompt 'Would you like to (h)it or (s)tay?'
-      player_turn = gets.chomp.downcase
-      break if %w(h s).include?(player_turn)
-      prompt "Sorry, must enter 'h' or 's'."
+      break if busted?(player_total)
+      player_turn = nil
+
+      loop do
+        prompt 'Would you like to (h)it or (s)tay?'
+        player_turn = gets.chomp.downcase
+        break if %w(h s).include?(player_turn)
+        prompt "Sorry, must enter 'h' or 's'."
+      end
+
+      if player_turn == 'h'
+        player_cards << get_cards(deck)
+        player_total, player_aces = running_total(player_cards.last,
+                                                  player_total, player_aces)
+        prompt 'You chose to hit!'
+        prompt "Your cards are now: #{join_cards(player_cards)}"
+        prompt "Your total is now: #{player_total}"
+      end
+
+      break if player_turn == 's'
     end
 
-    if player_turn == 'h'
-      player_cards << get_cards(deck)
-      player_total, player_aces = running_total(player_cards.last,
-                                                player_total, player_aces)
-      prompt 'You chose to hit!'
-      prompt "Your cards are now: #{join_cards(player_cards)}"
-      prompt "Your total is now: #{player_total}"
+    unless busted?(player_total)
+      prompt "Dealer's turn..."
+
+      until dealer_total >= DEALER_LIMIT
+        prompt 'Dealer hits!'
+        dealer_cards << get_cards(deck)
+        dealer_total, dealer_aces = running_total(dealer_cards.last,
+                                                  dealer_total, dealer_aces)
+        prompt "Dealer's cards are now: #{join_cards(dealer_cards)}"
+      end
     end
 
-    break if player_turn == 's'
-  end
-
-  unless busted?(player_total)
-    prompt "Dealer's turn..."
-
-    until dealer_total >= DEALER_LIMIT
-      prompt 'Dealer hits!'
-      dealer_cards << get_cards(deck)
-      dealer_total, dealer_aces = running_total(dealer_cards.last,
-                                                dealer_total, dealer_aces)
-      prompt "Dealer's cards are now: #{join_cards(dealer_cards)}"
-    end
-  end
-
-  result = detect_result(dealer_total, player_total)
-  track_score(result, score)
-
-  if score.value?(ROUNDS)
-    display_game_winner(score)
-  else
+    result = detect_result(dealer_total, player_total)
+    track_score(result, score)
     show_round_results(dealer_cards, dealer_total, player_cards, player_total)
+    
+    prompt 'Press enter to continue...'
+    gets
+
+    break display_game_winner(score) if score.value?(ROUNDS)
   end
 
   prompt 'Do you want to play again? (y or n)'
