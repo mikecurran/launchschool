@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 DEALER_LIMIT = 17
 GAME_LIMIT = 21
-ROUNDS = 5
+WINNING_SCORE = 5
 SUITS = %w(Hearts Diamonds Spades Clubs).freeze
 VALUES = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace).freeze
 
@@ -115,9 +115,9 @@ end
 
 def display_game_winner(final_score)
   final_score.each do |player, score|
-    if score == ROUNDS && player == :player
+    if score == WINNING_SCORE && player == :player
       prompt 'You won the game!'
-    elsif score == ROUNDS && player == :dealer
+    elsif score == WINNING_SCORE && player == :dealer
       prompt 'The dealer won the game!'
     end
   end
@@ -197,7 +197,7 @@ loop do
     gets
     clear_screen
 
-    break display_game_winner(score) if score.value?(ROUNDS)
+    break display_game_winner(score) if score.value?(WINNING_SCORE)
   end
 
   prompt 'Do you want to play again? (y or n)'
