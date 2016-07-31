@@ -30,7 +30,7 @@ end
 def initial_total(cards)
   values = cards.map { |card| card[0] }
 
-  sum = 0
+  aces = sum = 0
   values.each do |value|
     sum += if value == 'Ace' then 11
            elsif value.to_i == 0 then 10 # J, Q, K
@@ -38,13 +38,8 @@ def initial_total(cards)
            end
   end
 
-  initial_ace_adjustment(values, sum)
-end
-
-def initial_ace_adjustment(values, sum)
-  sum -= 10 if sum == 22
-  aces = values.select { |value| value == 'Ace' }.count > 0 ? 1 : 0
-  [sum, aces]
+  values.each { |value| aces += 1 if value == 'Ace' }
+  ace_adjustment(sum, aces)
 end
 
 def running_total(card, sum, aces)
@@ -55,10 +50,10 @@ def running_total(card, sum, aces)
          end
 
   aces += 1 if value == 'Ace'
-  running_ace_adjustment(sum, aces)
+  ace_adjustment(sum, aces)
 end
 
-def running_ace_adjustment(sum, aces)
+def ace_adjustment(sum, aces)
   while sum > GAME_LIMIT && aces > 0
     sum -= 10
     aces -= 1
