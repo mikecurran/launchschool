@@ -41,8 +41,9 @@ This repo contains the code and files for the exercises, challenges, and project
 
 ## Front-end Development
   1. 201 - HTML & CSS
-  2. 220 - Javascript and Front-End Programming
-  3. 260 - Building Applications with Client-Side MVC
+  2. 210 - Computational Thinking and JavaScript Programming
+  3. 220 - Front End Development with JavaScript
+  4. 260 - Building Applications with Client-Side MVC
 
 ## Frameworks, Integrations and Advanced Topics
   1. 301 - Rapid Prototyping with Ruby on Rails
